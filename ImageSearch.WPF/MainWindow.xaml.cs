@@ -48,7 +48,7 @@ namespace ImageSearch.WPF
                         timer.Stop();
 
                         folders.Add(selectedPath);
-                        UpdateIndexStatus();
+                        UpdateFolderStatus();
                         UpdateLog($"Add folder: \"{selectedPath}\"");
                         UpdateLog($"Index build: files - {index.FilesCount}, index records - {index.IndexCount}, search pattern - {index.Pattern}");
                         UpdateLog($"Time - {timer.ElapsedMilliseconds / 1000}s");
@@ -59,6 +59,15 @@ namespace ImageSearch.WPF
                     }
                 }
             }
+        }
+
+        private void ClearIndexButton_Click(object sender, RoutedEventArgs e)
+        {
+            ClearIndexButton.IsEnabled = false;
+            index = new Index();
+            folders = new List<string>();
+            UpdateFolderStatus();
+            UpdateLog($"Index is empty");
         }
 
         private void OpenExcelFileButton_Click(object sender, RoutedEventArgs e)
@@ -199,10 +208,10 @@ namespace ImageSearch.WPF
             }
         }
 
-        private void UpdateIndexStatus()
+        private void UpdateFolderStatus()
         {
             FolderListBox.Items.Clear();
-
+            
             foreach (string folder in folders)
             {
                 FolderListBox.Items.Add(folder);
@@ -211,6 +220,8 @@ namespace ImageSearch.WPF
             foldersLabel.Content = folders.Count;
             filesLabel.Content = index.FilesCount;
             recordsLabel.Content = index.IndexCount;
+
+            if (folders.Count != 0) ClearIndexButton.IsEnabled = true;
         }
 
         private void UpdateLog(string msg, MsgStatus status = MsgStatus.Info)
