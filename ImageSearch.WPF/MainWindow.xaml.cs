@@ -173,10 +173,9 @@ namespace ImageSearch.WPF
                     var progress = new Progress<Tuple<string, string, int, int>>(ProgressReport);
                     filesCopied = await editor.CollectFiles(progress);
                     timer.Stop();
+                    UpdateLog($"Copied {filesCopied} files to \"{outputFolder}\"");
+                    UpdateLog($"Time - {timer.ElapsedMilliseconds / 1000}s");
                 }
-
-                UpdateLog($"Copied {filesCopied} files to \"{outputFolder}\"");
-                UpdateLog($"Time - {timer.ElapsedMilliseconds / 1000}s");
 
                 ClearWorkspace();
             }
@@ -250,6 +249,7 @@ namespace ImageSearch.WPF
         private void ClearWorkspace()
         {
             editor.Dispose();
+            editor = null;
             xlsxFile = "[Empty]";
 
             UpdateXlsStatus();

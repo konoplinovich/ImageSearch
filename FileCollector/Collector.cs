@@ -40,7 +40,6 @@ namespace FileCollector
             string newFullPath = Path.Combine(baseFolder, fileName);
 
             filesMap[oldFullPath] = newFullPath;
-            //File.Copy(oldFullPath, newFullPath);
         }
 
         public async Task<int> Copy(IProgress<Tuple<string, string, int, int>> progress)
@@ -50,16 +49,20 @@ namespace FileCollector
 
             foreach (KeyValuePair<string, string> kv in filesMap)
             {
+                DateTime creation = File.GetCreationTime(kv.Key);
+
                 using (FileStream SourceStream = File.Open(kv.Key, FileMode.Open))
                 {
                     using (FileStream DestinationStream = File.Create(kv.Value))
                     {
                         await SourceStream.CopyToAsync(DestinationStream);
-                        count++;
-
-                        progress.Report(new Tuple<string, string, int, int>(kv.Key, kv.Value, totalCount, count));
                     }
                 }
+
+                count++;
+                File.SetLastWriteTime(kv.Value, creation);
+
+                progress.Report(new Tuple<string, string, int, int>(kv.Key, kv.Value, totalCount, count));
             }
 
             return count;
