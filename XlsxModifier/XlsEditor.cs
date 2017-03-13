@@ -58,14 +58,14 @@ namespace XlsxModifier
                         foreach (string file in searched)
                         {
                             collector.Add(file);
-                            fileNames.Append($"{collector.GetCopyByOriginal(file)};");
+                            fileNames.Append($"{collector.GetCopyByOriginal(file)}");
                         }
                     }
                     else
                     {
                         foreach (string file in searched)
                         {
-                            fileNames.Append($"{file};");
+                            fileNames.Append($"{file}");
                         }
                     }
 

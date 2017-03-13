@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -83,6 +84,25 @@ namespace ImageIndex
             foreach (var kv in mainIndex)
             {
                 if (kv.Value.Contains(pattern)) list.Add(kv.Key);
+            }
+
+            if (list.Count == 0 || list.Count == 1) return list;
+            else
+            {
+                Dictionary<string, DateTime> filesWithDates = new Dictionary<string, DateTime>();
+
+                foreach (string file in list)
+                {
+                    filesWithDates.Add(file, File.GetCreationTime(file));
+                }
+
+                List<DateTime> dates = filesWithDates.Values.ToList();
+                dates.Sort();
+
+                foreach (var date in filesWithDates)
+                {
+                    if (date.Value == dates[dates.Count - 1]) return new List<string> { date.Key };
+                }
             }
 
             return list;
