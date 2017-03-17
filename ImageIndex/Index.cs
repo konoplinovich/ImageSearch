@@ -93,7 +93,7 @@ namespace ImageIndex
 
                 foreach (string file in list)
                 {
-                    filesWithDates.Add(file, File.GetCreationTime(file));
+                    filesWithDates.Add(file, File.GetLastWriteTime(file));
                 }
 
                 List<DateTime> dates = filesWithDates.Values.ToList();

@@ -49,7 +49,7 @@ namespace FileCollector
 
             foreach (KeyValuePair<string, string> kv in filesMap)
             {
-                DateTime creation = File.GetCreationTime(kv.Key);
+                DateTime modify = File.GetLastWriteTime(kv.Key);
 
                 using (FileStream SourceStream = File.Open(kv.Key, FileMode.Open))
                 {
@@ -60,7 +60,7 @@ namespace FileCollector
                 }
 
                 count++;
-                File.SetLastWriteTime(kv.Value, creation);
+                File.SetLastWriteTime(kv.Value, modify);
 
                 progress.Report(new Tuple<string, string, int, int>(kv.Key, kv.Value, totalCount, count));
             }
