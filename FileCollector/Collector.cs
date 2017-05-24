@@ -51,7 +51,7 @@ namespace FileCollector
             {
                 DateTime modify = File.GetLastWriteTime(kv.Key);
 
-                using (FileStream SourceStream = File.Open(kv.Key, FileMode.Open))
+                using (FileStream SourceStream = File.Open(kv.Key, FileMode.Open, FileAccess.Read))
                 {
                     using (FileStream DestinationStream = File.Create(kv.Value))
                     {
