@@ -98,6 +98,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ClosedXML\ClosedXML.csproj">
+      <Project>{bd5e6bfe-e837-4a35-bca9-39667d873a20}</Project>
+      <Name>ClosedXML</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ImageIndex\ImageIndex.csproj">
       <Project>{a1d34f39-c82c-4c3a-864b-5d524a7e464c}</Project>
       <Name>ImageIndex</Name>

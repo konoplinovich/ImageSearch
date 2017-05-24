@@ -1,12 +1,13 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using FileCollector;
+using ImageIndex;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using ClosedXML.Excel;
-using FileCollector;
-using ImageIndex;
+using System.Windows.Media;
 
 // Modify Excel file
 
@@ -24,6 +25,9 @@ namespace XlsxModifier
 
         public List<string> Sheets { get { return GetSheetsNames(); } }
         public int FilesToCollect { get { return collector.Count; } }
+
+        public XLColor R { get; set; }
+        public XLColor W { get; set; }
 
         public XlsxEditor(string xlsxfile)
         {
@@ -49,6 +53,8 @@ namespace XlsxModifier
                 if (regex.Matches(pluValue).Count == 0) continue;
                 List<string> searched = index.Search(pluValue);
 
+                XLColor color = XLColor.NoColor;
+
                 if (searched.Count != 0)
                 {
                     StringBuilder fileNames = new StringBuilder();
@@ -72,14 +78,16 @@ namespace XlsxModifier
                     row.Cell(lastColumnNumber + 1).Value = searched.Count;
                     row.Cell(lastColumnNumber + 2).Value = fileNames.ToString();
 
-                    row.Style.Fill.BackgroundColor = XLColor.PaleGreen;
+                    color = R;
 
                     count++;
                 }
                 else
                 {
-                    row.Style.Fill.BackgroundColor = XLColor.Coral;
+                    color = W;
                 }
+
+                row.Style.Fill.BackgroundColor = color;
             }
 
             string ext = Path.GetExtension(xlsxfile);

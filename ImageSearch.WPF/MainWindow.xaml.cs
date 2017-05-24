@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageIndex;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -6,8 +7,9 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using ImageIndex;
+using System.Windows.Media;
 using XlsxModifier;
+using ClosedXML.Excel;
 
 namespace ImageSearch.WPF
 {
@@ -22,11 +24,14 @@ namespace ImageSearch.WPF
         private string xlsxFile;
         private bool moveLinks;
         private List<string> folders = new List<string>();
-
+        
         public MainWindow()
         {
             InitializeComponent();
             AddVersionToTitle();
+
+            ColorsRightCombo.SelectedIndex = 103;
+            ColorsWrongCombo.SelectedIndex = 16;
         }
 
         private void AddFolderButton_Click(object sender, RoutedEventArgs e)
@@ -82,6 +87,10 @@ namespace ImageSearch.WPF
                     try
                     {
                         editor = new XlsxEditor(xlsxFile);
+
+                        editor.R = XLColor.FromName(ColorsRightCombo.SelectedValue.ToString());
+                        editor.W = XLColor.FromName(ColorsWrongCombo.SelectedValue.ToString());
+
                         UpdateXlsStatus();
                         UpdateLog($"Selecting Excel file: \"{xlsxFile}\", sheets count - {editor.Sheets.Count}");
                     }
@@ -115,10 +124,9 @@ namespace ImageSearch.WPF
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
                     outputFolder = OutputFolderDialog.SelectedPath;
+                    UpdateOutputFolderStatus();
+                    UpdateLog($"Selecting output folder: \"{outputFolder}\"");
                 }
-
-                UpdateOutputFolderStatus();
-                UpdateLog($"Selecting output folder: \"{outputFolder}\"");
             }
         }
 
@@ -153,6 +161,9 @@ namespace ImageSearch.WPF
             try
             {
                 Stopwatch timer = new Stopwatch();
+
+                editor.R = XLColor.FromName(ColorsRightCombo.SelectedValue.ToString());
+                editor.W = XLColor.FromName(ColorsWrongCombo.SelectedValue.ToString());
 
                 timer.Start();
                 Tuple<int, string> result = editor.Change(index, SheetSelectorListBox.SelectedIndex, outputFolder, moveLinks);
