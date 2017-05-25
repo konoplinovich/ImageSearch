@@ -7,7 +7,7 @@ namespace ImageIndex.Test
     [TestClass]
     public class ImageIndexTest
     {
-        const string BasePath = @"w:\dev\workspace\Developed\ImageSearch\TestData\";
+        const string BasePath = @"s:\dev\!tests\test1\";
         string[] testPaths = { Path.Combine(BasePath, "1"), Path.Combine(BasePath, "2") };
 
         private Index MakeIndex()
@@ -78,9 +78,9 @@ namespace ImageIndex.Test
             List<string> s4 = index.Search("123456");
 
             Assert.AreEqual(1, s1.Count);
-            Assert.AreEqual(3, s2.Count);
+            Assert.AreEqual(1, s2.Count);
             Assert.AreEqual(0, s3.Count);
-            Assert.AreEqual(4, s4.Count);
+            Assert.AreEqual(1, s4.Count);
         }
 
         [TestMethod]

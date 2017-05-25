@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using IOTools;
 
 namespace ImageIndex
 {
@@ -151,7 +152,9 @@ namespace ImageIndex
 
         private void Building(string path)
         {
-            string[] filesForIndexing = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
+            IOHelper helper = new IOHelper(path);
+            List<string> filesForIndexing = helper.FileList;
+
             Regex regex = new Regex(IndexPattern);
 
             foreach (string f in filesForIndexing)

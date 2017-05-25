@@ -6,7 +6,7 @@ namespace FileCollector.Test
     [TestClass]
     public class FileCollectorTest
     {
-        const string BasePath = @"w:\dev\workspace\Developed\ImageSearch\TestData\";
+        const string BasePath = @"s:\dev\!tests\test1\";
         Collector collector = new Collector(Path.Combine(BasePath, "New"));
 
         [TestInitialize]
