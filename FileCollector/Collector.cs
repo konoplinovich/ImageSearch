@@ -64,7 +64,7 @@ namespace FileCollector
 
                 progress.Report(new Tuple<string, string, int, int>(kv.Key, kv.Value, totalCount, count));
             }
-                       
+
             return count;
         }
 

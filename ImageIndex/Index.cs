@@ -1,10 +1,10 @@
-﻿using System;
+﻿using IOTools;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using IOTools;
 using System.Threading.Tasks;
 
 namespace ImageIndex

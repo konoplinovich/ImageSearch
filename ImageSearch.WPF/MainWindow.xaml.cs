@@ -1,15 +1,15 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using ImageIndex;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using ClosedXML.Excel;
-using ImageIndex;
 using XlsxModifier;
-using System.Threading.Tasks;
 
 namespace ImageSearch.WPF
 {
@@ -24,7 +24,7 @@ namespace ImageSearch.WPF
         private string xlsxFile;
         private bool moveLinks;
         private List<string> folders = new List<string>();
-        
+
         public MainWindow()
         {
             InitializeComponent();
@@ -230,7 +230,7 @@ namespace ImageSearch.WPF
         private void UpdateFolderStatus()
         {
             FolderListBox.Items.Clear();
-            
+
             foreach (string folder in folders)
             {
                 FolderListBox.Items.Add(folder);
