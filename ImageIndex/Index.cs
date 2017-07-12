@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using IOTools;
+using System.Threading.Tasks;
 
 namespace ImageIndex
 {
     public class Index
     {
         readonly string IndexPattern = @"(\d{4,})";
+        IProgress<string> m_progress;
         List<string> paths;
         List<string> files;
         Dictionary<string, List<string>> mainIndex = new Dictionary<string, List<string>>();
@@ -19,17 +21,18 @@ namespace ImageIndex
         public int IndexCount { get { return mainIndex.Keys.Count; } }
         public string Pattern { get { return IndexPattern; } }
 
-        public Index()
+        public Index(IProgress<string> progress = null)
         {
             paths = new List<string>();
             files = new List<string>();
+            m_progress = progress;
         }
 
-        public void Add(string path)
+        public async Task Add(string path)
         {
             if (!Directory.Exists(path)) return;
             if (files.Contains(path)) return;
-            Building(path);
+            await Building(path);
         }
 
         public Index(string filename)
@@ -150,9 +153,10 @@ namespace ImageIndex
             }
         }
 
-        private void Building(string path)
+        private async Task Building(string path)
         {
-            IOHelper helper = new IOHelper(path);
+            IOHelper helper = new IOHelper(path, m_progress);
+            await helper.TraverseTreeAsync();
             List<string> filesForIndexing = helper.FileList;
 
             Regex regex = new Regex(IndexPattern);

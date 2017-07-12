@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using ClosedXML.Excel;
 using ImageIndex;
 using XlsxModifier;
+using System.Threading.Tasks;
 
 namespace ImageSearch.WPF
 {
@@ -17,7 +18,7 @@ namespace ImageSearch.WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Index index = new Index();
+        private Index index;
         private XlsxEditor editor;
         private string outputFolder;
         private string xlsxFile;
@@ -29,11 +30,14 @@ namespace ImageSearch.WPF
             InitializeComponent();
             AddVersionToTitle();
 
+            Progress<string> p = new Progress<string>(ProgressReportIndex);
+            index = new Index(p);
+
             ColorsRightCombo.SelectedIndex = 103;
             ColorsWrongCombo.SelectedIndex = 16;
         }
 
-        private void AddFolderButton_Click(object sender, RoutedEventArgs e)
+        private async void AddFolderButton_Click(object sender, RoutedEventArgs e)
         {
             using (var folderDialog = new FolderBrowserDialog())
             {
@@ -48,7 +52,12 @@ namespace ImageSearch.WPF
                     try
                     {
                         timer.Start();
-                        index.Add(selectedPath);
+                        AddFolderButton.IsEnabled = false;
+                        ClearIndexButton.IsEnabled = false;
+                        await Task.Run(async () => { await index.Add(selectedPath); });
+                        AddFolderButton.IsEnabled = true;
+                        ClearIndexButton.IsEnabled = true;
+                        IndexProgressLabel.Content = "";
                         timer.Stop();
 
                         folders.Add(selectedPath);
@@ -68,7 +77,8 @@ namespace ImageSearch.WPF
         private void ClearIndexButton_Click(object sender, RoutedEventArgs e)
         {
             ClearIndexButton.IsEnabled = false;
-            index = new Index();
+            Progress<string> p = new Progress<string>(ProgressReportIndex);
+            index = new Index(p);
             folders = new List<string>();
             UpdateFolderStatus();
             UpdateLog($"Index is empty");
@@ -266,6 +276,7 @@ namespace ImageSearch.WPF
 
             CopyProgressLabel.Content = "";
             CopyProgressFileLabel.Content = "";
+            IndexProgressLabel.Content = "";
             CopyProgressBar.Value = 0;
         }
 
@@ -277,6 +288,11 @@ namespace ImageSearch.WPF
             CopyProgressLabel.Dispatcher.Invoke(() => CopyProgressLabel.Content = reportString1);
             CopyProgressFileLabel.Dispatcher.Invoke(() => CopyProgressFileLabel.Content = reportString2);
             CopyProgressBar.Value = msg.Item4;
+        }
+
+        private void ProgressReportIndex(string msg)
+        {
+            IndexProgressLabel.Dispatcher.Invoke(() => IndexProgressLabel.Content = msg);
         }
 
         private enum MsgStatus
