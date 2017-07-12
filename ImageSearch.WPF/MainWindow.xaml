@@ -143,6 +143,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <ProgressBar Name="CopyProgressBar" Grid.Column="0" Grid.ColumnSpan="2" Foreground="#FFFFB900"/>
+            <Label Name="IndexProgressLabel" Margin="5,0,0,0" Grid.ColumnSpan="2" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
             <Label Name="CopyProgressLabel" Margin="5,0,0,0" Grid.Column="0" Width="200" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"></Label>
             <Label Name="CopyProgressFileLabel" Grid.Column="1" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalAlignment="Center"></Label>
         </Grid>
