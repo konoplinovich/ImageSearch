@@ -11,7 +11,8 @@ namespace ImageIndex
 {
     public class Index
     {
-        readonly string IndexPattern = @"(\d{4,})";
+        const string DefaultPattern = @"(\d{4,})";
+        string m_indexPattern;
         IProgress<string> m_progress;
         List<string> paths;
         List<string> files;
@@ -19,13 +20,15 @@ namespace ImageIndex
 
         public int FilesCount { get { return files.Count; } }
         public int IndexCount { get { return mainIndex.Keys.Count; } }
-        public string Pattern { get { return IndexPattern; } }
+        public Dictionary<string, List<string>> IndexDictionary {  get { return mainIndex; } }
+        public string Pattern { get { return m_indexPattern; } set { m_indexPattern = value; } }
 
         public Index(IProgress<string> progress = null)
         {
             paths = new List<string>();
             files = new List<string>();
             m_progress = progress;
+            m_indexPattern = DefaultPattern;
         }
 
         public async Task Add(string path)
@@ -159,15 +162,17 @@ namespace ImageIndex
             await helper.TraverseTreeAsync();
             List<string> filesForIndexing = helper.FileList;
 
-            Regex regex = new Regex(IndexPattern);
+            Regex regex = new Regex(m_indexPattern);
 
             foreach (string f in filesForIndexing)
             {
                 List<string> matches = new List<string>();
 
-                foreach (Match match in regex.Matches(f))
+                string filename = Path.GetFileName(f);
+
+                foreach (Match match in regex.Matches(filename))
                 {
-                    matches.Add(match.Groups[1].Value);
+                    matches.Add(match.Groups[0].Value);
                 }
 
                 if (matches.Count != 0) mainIndex[f] = matches;

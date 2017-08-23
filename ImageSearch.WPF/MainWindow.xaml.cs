@@ -33,12 +33,15 @@ namespace ImageSearch.WPF
             Progress<string> p = new Progress<string>(ProgressReportIndex);
             index = new Index(p);
 
+            PatternTextBox.Text = index.Pattern;
             ColorsRightCombo.SelectedIndex = 103;
             ColorsWrongCombo.SelectedIndex = 16;
         }
 
         private async void AddFolderButton_Click(object sender, RoutedEventArgs e)
         {
+            if (!string.IsNullOrEmpty(PatternTextBox.Text)) index.Pattern = PatternTextBox.Text;
+
             using (var folderDialog = new FolderBrowserDialog())
             {
                 DialogResult result = folderDialog.ShowDialog();
@@ -57,7 +60,7 @@ namespace ImageSearch.WPF
                         await Task.Run(async () => { await index.Add(selectedPath); });
                         AddFolderButton.IsEnabled = true;
                         ClearIndexButton.IsEnabled = true;
-                        IndexProgressLabel.Content = "";
+                        IndexProgressLabel.Text = "";
                         timer.Stop();
 
                         folders.Add(selectedPath);
@@ -205,6 +208,13 @@ namespace ImageSearch.WPF
             }
         }
 
+        private void ViewIndexButton_Click(object sender, RoutedEventArgs e)
+        {
+            Window indexWindow = new IndexWindow(index.IndexDictionary);
+            indexWindow.Owner = this;
+            indexWindow.ShowDialog();
+        }
+
         private void LogTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             LogTextBox.CaretIndex = LogTextBox.Text.Length;
@@ -276,7 +286,7 @@ namespace ImageSearch.WPF
 
             CopyProgressLabel.Content = "";
             CopyProgressFileLabel.Content = "";
-            IndexProgressLabel.Content = "";
+            IndexProgressLabel.Text = "";
             CopyProgressBar.Value = 0;
         }
 
@@ -292,7 +302,7 @@ namespace ImageSearch.WPF
 
         private void ProgressReportIndex(string msg)
         {
-            IndexProgressLabel.Dispatcher.Invoke(() => IndexProgressLabel.Content = msg);
+            IndexProgressLabel.Dispatcher.Invoke(() => IndexProgressLabel.Text = msg);
         }
 
         private enum MsgStatus
