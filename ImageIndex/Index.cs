@@ -14,19 +14,21 @@ namespace ImageIndex
         const string DefaultPattern = @"(\d{4,})";
         string m_indexPattern;
         IProgress<string> m_progress;
-        List<string> paths;
-        List<string> files;
-        Dictionary<string, List<string>> mainIndex = new Dictionary<string, List<string>>();
+        List<string> m_paths;
+        List<string> m_files;
+        Dictionary<string, List<string>> m_mainIndex = new Dictionary<string, List<string>>();
+        private Dictionary<string, string> m_errors = new Dictionary<string, string>();
 
-        public int FilesCount { get { return files.Count; } }
-        public int IndexCount { get { return mainIndex.Keys.Count; } }
-        public Dictionary<string, List<string>> IndexDictionary {  get { return mainIndex; } }
+        public int FilesCount { get { return m_files.Count; } }
+        public int IndexCount { get { return m_mainIndex.Keys.Count; } }
+        public Dictionary<string, List<string>> IndexDictionary {  get { return m_mainIndex; } }
+        public Dictionary<string, string> ErrorDictionary {  get { return m_errors; } }
         public string Pattern { get { return m_indexPattern; } set { m_indexPattern = value; } }
 
         public Index(IProgress<string> progress = null)
         {
-            paths = new List<string>();
-            files = new List<string>();
+            m_paths = new List<string>();
+            m_files = new List<string>();
             m_progress = progress;
             m_indexPattern = DefaultPattern;
         }
@@ -34,7 +36,7 @@ namespace ImageIndex
         public async Task Add(string path)
         {
             if (!Directory.Exists(path)) return;
-            if (files.Contains(path)) return;
+            if (m_files.Contains(path)) return;
             await Building(path);
         }
 
@@ -47,20 +49,20 @@ namespace ImageIndex
         {
             List<string> pathsToSave = new List<string>();
             pathsToSave.Add("[Paths]");
-            pathsToSave.AddRange(paths);
+            pathsToSave.AddRange(m_paths);
             File.WriteAllLines(filename, pathsToSave);
 
             List<string> filesToSave = new List<string>();
             filesToSave.Add("[Files]");
 
-            foreach (string file in files)
+            foreach (string file in m_files)
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append($"{file};");
 
-                if (mainIndex.ContainsKey(file))
+                if (m_mainIndex.ContainsKey(file))
                 {
-                    foreach (var keyword in mainIndex[file])
+                    foreach (var keyword in m_mainIndex[file])
                     {
                         sb.Append($"{keyword};");
                     }
@@ -74,13 +76,13 @@ namespace ImageIndex
 
         public int GetImageKeywordsCount(string filename)
         {
-            if (mainIndex.ContainsKey(filename)) return mainIndex[filename].Count;
+            if (m_mainIndex.ContainsKey(filename)) return m_mainIndex[filename].Count;
             else return -1;
         }
 
         public List<string> GetImageKeywords(string filename)
         {
-            if (mainIndex.ContainsKey(filename)) return mainIndex[filename];
+            if (m_mainIndex.ContainsKey(filename)) return m_mainIndex[filename];
             else return null;
         }
 
@@ -88,7 +90,7 @@ namespace ImageIndex
         {
             var list = new List<string>();
 
-            foreach (var kv in mainIndex)
+            foreach (var kv in m_mainIndex)
             {
                 if (kv.Value.Contains(pattern)) list.Add(kv.Key);
             }
@@ -117,8 +119,8 @@ namespace ImageIndex
 
         private void Load(string filename)
         {
-            paths = new List<string>();
-            files = new List<string>();
+            m_paths = new List<string>();
+            m_files = new List<string>();
 
             string[] lines = File.ReadAllLines(filename);
 
@@ -137,7 +139,7 @@ namespace ImageIndex
                 if (searchFile != -1) fileSection = i + 1;
             }
 
-            for (int i = pathSection; i < fileSection - 1; i++) paths.Add(lines[i]);
+            for (int i = pathSection; i < fileSection - 1; i++) m_paths.Add(lines[i]);
 
             for (int i = fileSection; i < lines.Length; i++)
             {
@@ -151,8 +153,8 @@ namespace ImageIndex
                     values.Add(splited[x]);
                 }
 
-                mainIndex[key] = values;
-                files.Add(key);
+                m_mainIndex[key] = values;
+                m_files.Add(key);
             }
         }
 
@@ -161,6 +163,7 @@ namespace ImageIndex
             IOHelper helper = new IOHelper(path, m_progress);
             await helper.TraverseTreeAsync();
             List<string> filesForIndexing = helper.FileList;
+            m_errors = helper.ErrorList;
 
             Regex regex = new Regex(m_indexPattern);
 
@@ -175,10 +178,10 @@ namespace ImageIndex
                     matches.Add(match.Groups[0].Value);
                 }
 
-                if (matches.Count != 0) mainIndex[f] = matches;
+                if (matches.Count != 0) m_mainIndex[f] = matches;
             }
 
-            files.AddRange(filesForIndexing);
+            m_files.AddRange(filesForIndexing);
         }
     }
 }

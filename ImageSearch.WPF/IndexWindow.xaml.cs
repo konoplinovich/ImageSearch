@@ -1,16 +1,7 @@
-﻿using System;
+﻿using ImageIndex;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ImageSearch.WPF
 {
@@ -19,22 +10,27 @@ namespace ImageSearch.WPF
     /// </summary>
     public partial class IndexWindow : Window
     {
-        public IndexWindow(Dictionary<string, List<string>> index)
+        public IndexWindow(Index index)
         {
             InitializeComponent();
 
             Dictionary<string, string> flatIndex = new Dictionary<string, string>();
 
-            foreach (var item in index)
+            foreach (var item in index.IndexDictionary)
             {
                 string flat = "";
 
-
+                for (int i = 0; i < item.Value.Count; i++)
+                {
+                    flat += item.Value[i];
+                    if (i != item.Value.Count - 1) flat += Environment.NewLine;
+                }
 
                 flatIndex[item.Key] = flat;
             }
 
             IndexList.ItemsSource = flatIndex;
+            ErrorList.ItemsSource = index.ErrorDictionary;
         }
     }
 }

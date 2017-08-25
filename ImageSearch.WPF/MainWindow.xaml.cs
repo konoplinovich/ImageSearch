@@ -210,7 +210,7 @@ namespace ImageSearch.WPF
 
         private void ViewIndexButton_Click(object sender, RoutedEventArgs e)
         {
-            Window indexWindow = new IndexWindow(index.IndexDictionary);
+            Window indexWindow = new IndexWindow(index);
             indexWindow.Owner = this;
             indexWindow.ShowDialog();
         }
@@ -223,12 +223,12 @@ namespace ImageSearch.WPF
 
         private void UpdateOutputFolderStatus()
         {
-            OutPutFolderlabel.Content = outputFolder;
+            OutPutFolderlabel.Text = outputFolder;
         }
 
         private void UpdateXlsStatus()
         {
-            ExcelFileLabel.Content = xlsxFile;
+            ExcelFileLabel.Text = xlsxFile;
             SheetSelectorListBox.ItemsSource = null;
 
             if (editor != null)
@@ -285,7 +285,7 @@ namespace ImageSearch.WPF
             UpdateXlsStatus();
 
             CopyProgressLabel.Content = "";
-            CopyProgressFileLabel.Content = "";
+            CopyProgressFileLabel.Text = "";
             IndexProgressLabel.Text = "";
             CopyProgressBar.Value = 0;
         }
@@ -296,7 +296,7 @@ namespace ImageSearch.WPF
             string reportString2 = $"{msg.Item1}";
 
             CopyProgressLabel.Dispatcher.Invoke(() => CopyProgressLabel.Content = reportString1);
-            CopyProgressFileLabel.Dispatcher.Invoke(() => CopyProgressFileLabel.Content = reportString2);
+            CopyProgressFileLabel.Dispatcher.Invoke(() => CopyProgressFileLabel.Text = reportString2);
             CopyProgressBar.Value = msg.Item4;
         }
 

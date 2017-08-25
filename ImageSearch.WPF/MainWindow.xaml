@@ -115,7 +115,7 @@
             </ListBox>
             <StackPanel Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" Orientation="Horizontal">
                 <Label Margin="5,0,0,0" VerticalContentAlignment="Center" FontWeight="Bold">Excel file</Label>
-                <Label Name="ExcelFileLabel" VerticalContentAlignment="Center">[empty]</Label>
+                <TextBlock Name="ExcelFileLabel" VerticalAlignment="Center">[not selected]</TextBlock>
             </StackPanel>
             <CheckBox Name="CopyFilesCheckBox" Grid.Row="1" VerticalAlignment="Center" Margin="10,0,0,0" Click="CopyFilesCheckBox_Checked">copy files</CheckBox>
         </Grid>
@@ -132,8 +132,8 @@
             </Grid.ColumnDefinitions>
             <Button Name="SelectOutputButton" Margin="10,10,0,10" Height="30" VerticalAlignment="Top" FontWeight="Bold" IsEnabled="False" Click="SelectOutputButton_Click">Select output folder</Button>
             <StackPanel Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" Orientation="Horizontal">
-                <Label Name="OutPutFolderlabelD" Margin="5,0,0,10" VerticalContentAlignment="Center" FontWeight="Bold" IsEnabled="False">Output folder</Label>
-                <Label Name="OutPutFolderlabel" Margin="5,0,0,10" VerticalContentAlignment="Center" IsEnabled="False">[empty]</Label>
+                <Label Name="OutPutFolderlabelD" Margin="5,0,0,10" VerticalContentAlignment="Center" FontWeight="Bold" IsEnabled="False" Content="Output folder"/>
+                <TextBlock Name="OutPutFolderlabel" Margin="0,0,0,10" VerticalAlignment="Center" IsEnabled="False"><Run Text="[not selected]"/></TextBlock>
             </StackPanel>
         </Grid>
 
@@ -147,7 +147,7 @@
             <ProgressBar Name="CopyProgressBar" Grid.Column="0" Grid.ColumnSpan="2" Foreground="#FFFFB900"/>
             <TextBlock Name="IndexProgressLabel" Margin="5,0,0,0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <Label Name="CopyProgressLabel" Margin="5,0,0,0" Grid.Column="0" Width="200" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"></Label>
-            <Label Name="CopyProgressFileLabel" Grid.Column="1" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalAlignment="Center"></Label>
+            <TextBlock Name="CopyProgressFileLabel" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
         </Grid>
     </Grid>
 </Window>
