@@ -278,7 +278,14 @@ namespace ImageSearch.WPF
         private void AddVersionToTitle()
         {
             var v = Assembly.GetExecutingAssembly().GetName().Version;
+            
+            #if (!DEBUG)
+            Title += $" [{v.Major}.{v.Minor}]";
+            #endif
+            
+            #if DEBUG
             Title += $" [{v.Major}.{v.Minor} build {v.Build} revision {v.Revision}]";
+            #endif
         }
 
         private void ClearWorkspace()
