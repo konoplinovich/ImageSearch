@@ -172,7 +172,7 @@ namespace ImageIndex
             IOHelper helper = new IOHelper(path, m_progress);
             await helper.TraverseTreeAsync();
             List<string> filesForIndexing = helper.FileList;
-            m_errors = helper.ErrorList;
+            m_errors.AddRange(helper.ErrorList);
 
             Regex regex = new Regex(m_indexPattern);
 

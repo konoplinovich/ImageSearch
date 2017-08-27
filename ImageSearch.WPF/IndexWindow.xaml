@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageSearch.WPF"
         mc:Ignorable="d"
-        Title="IndexWindows" Width="920" Height="700" MinWidth="800" MinHeight="650" WindowStartupLocation="CenterOwner" Loaded="Window_Loaded">
+        Title="Index View" Width="920" Height="700" MinWidth="800" MinHeight="600" WindowStartupLocation="CenterOwner" Loaded="Window_Loaded">
 
     <!--main grid-->
 
@@ -22,7 +22,7 @@
 
     <Grid DataContext="{Binding SelectedItem, ElementName=IndexList}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*" MinHeight="200"/>
+            <RowDefinition Height="2*" MinHeight="300"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition MinHeight="150"/>
             <RowDefinition Height="Auto"/>
@@ -33,30 +33,31 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="34"/>
                 <RowDefinition/>
+                <RowDefinition Height="34"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="150"/>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" VerticalContentAlignment="Center" FontWeight="Bold" Padding="10,0">Files in index</Label>
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal">
+                <Label Grid.Column="0" FontWeight="Bold" Padding="10,0,0,0">Files in index:</Label>
+                <Label Name="CountLabel" Grid.Column="0" Padding="5,0,0,0">[empty]</Label>
+            </StackPanel>
+            
             <Label Grid.Column="1" VerticalContentAlignment="Center" Padding="0" FontWeight="Bold" Content="{Binding Converter={StaticResource KeysCountToLabelConverter}}"></Label>
-            <Grid Grid.Row="1" Margin="0,0,10,0">
+            <Grid Grid.Row="2" Margin="0,0,10,0">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                
-                <TextBox Name="SearchTextBox" Grid.Column="0" Margin="10,0,10,10" VerticalContentAlignment="Center"></TextBox>
-                <Button Name="SearchButton" Grid.Column="1" Margin="0,0,0,10" FontWeight="Bold" Padding="10,0,10,0" Click="SearchButton_Click">Search</Button>
-                <Button Name="ShowAllButton" Grid.Column="2" Margin="10,0,0,10" FontWeight="Bold" Padding="10,0,10,0" Visibility="Collapsed" Click="ShowAllButton_Click">Show all</Button>
+
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="10,0,0,10" FontWeight="Bold">Search:</TextBlock>
+                <TextBox Name="SearchTextBox" Grid.Column="1" Margin="10,0,0,10" VerticalContentAlignment="Center" TextChanged="SearchTextBox_TextChanged"></TextBox>
             </Grid>
 
-            <ListBox Name="IndexList" Grid.Row="2" Margin="10,0,10,10" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox Name="IndexList" Grid.Row="1" Margin="10,0,10,10" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Border Background="{Binding Converter={StaticResource KeysCountToBrushConverter}}" BorderThickness="1" BorderBrush="Gainsboro">

@@ -1,12 +1,8 @@
 ﻿using ImageIndex;
 using System;
 using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Data;
-using System.Globalization;
-using System.Windows.Media;
-using System.ComponentModel;
 using System.Diagnostics;
+using System.Windows;
 
 namespace ImageSearch.WPF
 {
@@ -15,8 +11,8 @@ namespace ImageSearch.WPF
     /// </summary>
     public partial class IndexWindow : Window
     {
-        private ICollectionView view;
         private Index index;
+        private int count;
 
         public IndexWindow(Index index)
         {
@@ -28,6 +24,9 @@ namespace ImageSearch.WPF
         {
             IndexList.ItemsSource = index.IndexDictionary;
             ErrorList.ItemsSource = index.ErrorDictionary;
+
+            count = index.IndexDictionary.Count;
+            CountLabel.Content = count;
         }
 
         private bool Filter(object item)
@@ -37,37 +36,26 @@ namespace ImageSearch.WPF
             return (kv.Key.IndexOf(SearchTextBox.Text, StringComparison.OrdinalIgnoreCase) >= 0);
         }
 
-        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        private void SearchTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            view = CollectionViewSource.GetDefaultView(IndexList.ItemsSource);
-            view.Filter = Filter;
-
-            if (IndexList == null) return;
-            if (IndexList.ItemsSource == null) return;
-            if (string.IsNullOrEmpty(SearchTextBox.Text)) return;
-
             Stopwatch timer = new Stopwatch();
 
             timer.Start();
-            CollectionViewSource.GetDefaultView(IndexList.ItemsSource).Refresh();
+            IndexList.Items.Filter = Filter;
             timer.Stop();
 
-            SearchTimingTextBlock.Text = $"Search time: {timer.Elapsed.TotalSeconds}s";
-            SearchTimingTextBlock.Visibility = Visibility.Visible;
-            ShowAllButton.Visibility = Visibility.Visible;
-            IndexList.SelectedIndex = 0;
-        }
+            int searchCount = IndexList.Items.Count;
+            
+            if (count != searchCount)
+            {
+                SearchTimingTextBlock.Text = $"Search time: {timer.Elapsed.TotalSeconds}s ({searchCount} records from {count})";
+                SearchTimingTextBlock.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                SearchTimingTextBlock.Visibility = Visibility.Collapsed;
+            }
 
-        private void ShowAllButton_Click(object sender, RoutedEventArgs e)
-        {
-            SearchTextBox.Text = "";
-
-            IndexList.ItemsSource = index.IndexDictionary;
-
-            view = null;
-
-            ShowAllButton.Visibility = Visibility.Collapsed;
-            SearchTimingTextBlock.Visibility = Visibility.Collapsed;
             IndexList.SelectedIndex = 0;
         }
     }
