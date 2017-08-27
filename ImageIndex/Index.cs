@@ -11,7 +11,7 @@ namespace ImageIndex
 {
     public class Index
     {
-        const string DefaultPattern = @"(\d{4,})";
+        const string DefaultPattern = @"\d{4,}";
         string m_indexPattern;
         IProgress<string> m_progress;
         List<string> m_paths;
@@ -21,9 +21,18 @@ namespace ImageIndex
 
         public int FilesCount { get { return m_files.Count; } }
         public int IndexCount { get { return m_mainIndex.Keys.Count; } }
-        public Dictionary<string, List<string>> IndexDictionary {  get { return m_mainIndex; } }
-        public Dictionary<string, string> ErrorDictionary {  get { return m_errors; } }
-        public string Pattern { get { return m_indexPattern; } set { m_indexPattern = value; } }
+        public Dictionary<string, List<string>> IndexDictionary { get { return m_mainIndex; } }
+        public Dictionary<string, string> ErrorDictionary { get { return m_errors; } }
+        public string Pattern
+        {
+            get { return m_indexPattern; }
+            set
+            {
+                try { Regex regex = new Regex(value); }
+                catch (Exception ex) { throw ex; }
+                m_indexPattern = value;
+            }
+        }
 
         public Index(IProgress<string> progress = null)
         {

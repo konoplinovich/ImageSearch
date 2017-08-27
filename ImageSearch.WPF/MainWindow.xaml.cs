@@ -40,7 +40,8 @@ namespace ImageSearch.WPF
 
         private async void AddFolderButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(PatternTextBox.Text)) index.Pattern = PatternTextBox.Text;
+            try { if (!string.IsNullOrEmpty(PatternTextBox.Text)) index.Pattern = PatternTextBox.Text; }
+            catch (Exception ex) { UpdateLog($"{ex.Message}", MsgStatus.Error); return; }
 
             using (var folderDialog = new FolderBrowserDialog())
             {
@@ -73,6 +74,8 @@ namespace ImageSearch.WPF
                     {
                         UpdateLog($"{ex.Message}", MsgStatus.Error);
                     }
+
+                    if (folders.Count > 0) ViewIndexButton.IsEnabled = true;
                 }
             }
         }
@@ -80,6 +83,7 @@ namespace ImageSearch.WPF
         private void ClearIndexButton_Click(object sender, RoutedEventArgs e)
         {
             ClearIndexButton.IsEnabled = false;
+            ViewIndexButton.IsEnabled = false;
             Progress<string> p = new Progress<string>(ProgressReportIndex);
             index = new Index(p);
             folders = new List<string>();
@@ -249,6 +253,7 @@ namespace ImageSearch.WPF
             foldersLabel.Content = folders.Count;
             filesLabel.Content = index.FilesCount;
             recordsLabel.Content = index.IndexCount;
+            errorsLabel.Content = index.ErrorDictionary.Count;
 
             if (folders.Count != 0) ClearIndexButton.IsEnabled = true;
         }

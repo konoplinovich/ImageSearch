@@ -69,6 +69,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters.cs" />
     <Compile Include="IndexWindow.xaml.cs">
       <DependentUpon>IndexWindow.xaml</DependentUpon>
     </Compile>

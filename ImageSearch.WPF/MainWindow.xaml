@@ -60,7 +60,7 @@
             <DockPanel Margin="10,10,0,0">
                 <Button Name="AddFolderButton" DockPanel.Dock="Top" Height="30" VerticalAlignment="Top" FontWeight="Bold" Click="AddFolderButton_Click">Add folder</Button>
                 <Button Name="ClearIndexButton" DockPanel.Dock="Top" Margin="0,10,0,0" Height="30" VerticalAlignment="Top" FontWeight="Bold" IsEnabled="False" Click="ClearIndexButton_Click">Clear index</Button>
-                <Button Name="ViewIndexButton" DockPanel.Dock="Top" Margin="0,10,0,0" Height="30" VerticalAlignment="Top" FontWeight="Bold" Click="ViewIndexButton_Click">View index</Button>
+                <Button Name="ViewIndexButton" DockPanel.Dock="Top" Margin="0,10,0,0" Height="30" VerticalAlignment="Top" FontWeight="Bold" Click="ViewIndexButton_Click" IsEnabled="False">View index</Button>
                 <TextBox Name="PatternTextBox" DockPanel.Dock="Top" Margin="0,10,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center">[ENTER PATTERN]</TextBox>
             </DockPanel>
             <ListBox Name="FolderListBox" Grid.Column="1" Margin="10,10,10,0">
@@ -72,6 +72,8 @@
                 <Label Name="filesLabel" VerticalContentAlignment="Center">0</Label>
                 <Label Margin="10,0,0,0" VerticalContentAlignment="Center" FontWeight="Bold">Index records</Label>
                 <Label Name="recordsLabel" VerticalContentAlignment="Center">0</Label>
+                <Label Margin="10,0,0,0" VerticalContentAlignment="Center" FontWeight="Bold">Errors</Label>
+                <Label Name="errorsLabel" VerticalContentAlignment="Center">0</Label>
             </StackPanel>
         </Grid>
 
