@@ -43,7 +43,7 @@
 
             <StackPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal">
                 <Label Grid.Column="0" FontWeight="Bold" Padding="10,0,0,0">Files in index:</Label>
-                <Label Name="CountLabel" Grid.Column="0" Padding="5,0,0,0">[empty]</Label>
+                <Label Name="CountLabel" Grid.Column="0" Padding="5,0,0,0">0</Label>
             </StackPanel>
             
             <Label Grid.Column="1" VerticalContentAlignment="Center" Padding="0" FontWeight="Bold" Content="{Binding Converter={StaticResource KeysCountToLabelConverter}}"></Label>
