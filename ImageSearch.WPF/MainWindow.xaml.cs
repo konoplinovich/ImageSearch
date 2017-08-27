@@ -279,7 +279,7 @@ namespace ImageSearch.WPF
         {
             var v = Assembly.GetExecutingAssembly().GetName().Version;
             
-            #if (!DEBUG)
+            #if RELEASE
             Title += $" [{v.Major}.{v.Minor}]";
             #endif
             
