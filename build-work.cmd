@@ -1,8 +1,8 @@
-"c:\Program Files (x86)\MSBuild\14.0\Bin\msbuild" ImageSearch.sln /p:Configuration=Release /p:Platform="Any CPU" /v:n /target:Clean /flp:logfile=BuildReleaseClean.log;verbosity=normal
-"c:\Program Files (x86)\MSBuild\14.0\Bin\msbuild" ImageSearch.sln /p:Configuration=Debug /p:Platform="Any CPU" /v:n /target:Clean /flp:logfile=BuildDebugClean.log;verbosity=normal
+"c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\msbuild" ImageSearch.sln /p:Configuration=Release /p:Platform="Any CPU" /v:n /target:Clean /flp:logfile=BuildReleaseClean.log;verbosity=normal
+"c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\msbuild" ImageSearch.sln /p:Configuration=Debug /p:Platform="Any CPU" /v:n /target:Clean /flp:logfile=BuildDebugClean.log;verbosity=normal
 
-"c:\Program Files (x86)\MSBuild\14.0\Bin\msbuild" ImageSearch.sln /p:Configuration=Release /p:Platform="Any CPU" /v:n /flp:logfile=BuildRelease.log;verbosity=normal
-"c:\Program Files (x86)\MSBuild\14.0\Bin\msbuild" ImageSearch.sln /p:Configuration=Debug /p:Platform="Any CPU" /v:n /flp:logfile=BuildDebug.log;verbosity=normal
+"c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\msbuild" ImageSearch.sln /p:Configuration=Release /p:Platform="Any CPU" /v:n /flp:logfile=BuildRelease.log;verbosity=normal
+"c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\msbuild" ImageSearch.sln /p:Configuration=Debug /p:Platform="Any CPU" /v:n /flp:logfile=BuildDebug.log;verbosity=normal
 
 copy s:\dev\ImageSearch\ImageSearch.WPF\bin\Debug\ClosedXML.dll s:\dev\ImageSearch\ImageSearch.Deploy\Debug\
 copy s:\dev\ImageSearch\ImageSearch.WPF\bin\Debug\DocumentFormat.OpenXml.dll s:\dev\ImageSearch\ImageSearch.Deploy\Debug\
