@@ -1,5 +1,4 @@
-﻿using ClosedXML.Excel;
-using ImageIndex;
+﻿using ImageIndex;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,8 +17,14 @@ namespace ImageSearch.WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const string ConfigFile = "ImageSearch.conf";
+        private string imageRoot;
+        private string noImageStub;
+        private string pattern;
+
         private Index index;
         private XlsxEditor editor;
+        private ConfigManager config;
         private string outputFolder;
         private string xlsxFile;
         private bool moveLinks;
@@ -29,13 +34,35 @@ namespace ImageSearch.WPF
         {
             InitializeComponent();
             AddVersionToTitle();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            config = new ConfigManager(ConfigFile);
+            ConfigManager.LoadStatus status = config.LoadConfig();
+
+            if (status == ConfigManager.LoadStatus.LoadedDefault)
+            {
+                System.Windows.MessageBox.Show("Dafault config loaded", "Alert", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+            imageRoot = config.Conf.ImageRoot;
+            noImageStub = config.Conf.NoImageStub;
+            pattern = config.Conf.Pattern;
 
             Progress<string> p = new Progress<string>(ProgressReportIndex);
-            index = new Index(p);
+            index = new Index(pattern, p);
 
             PatternTextBox.Text = index.Pattern;
-            ColorsRightCombo.SelectedIndex = 103;
-            ColorsWrongCombo.SelectedIndex = 16;
+            NoImageFileTextBox.Text = noImageStub;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            config.Conf.ImageRoot = imageRoot;
+            config.Conf.NoImageStub = noImageStub;
+            config.Conf.Pattern = PatternTextBox.Text;
+            config.SaveConfig();
         }
 
         private async void AddFolderButton_Click(object sender, RoutedEventArgs e)
@@ -43,7 +70,7 @@ namespace ImageSearch.WPF
             try { if (!string.IsNullOrEmpty(PatternTextBox.Text)) index.Pattern = PatternTextBox.Text; }
             catch (Exception ex) { UpdateLog($"{ex.Message}", MsgStatus.Error); return; }
 
-            using (var folderDialog = new FolderBrowserDialog())
+            using (var folderDialog = new FolderBrowserDialog() { SelectedPath = imageRoot})
             {
                 DialogResult result = folderDialog.ShowDialog();
 
@@ -52,6 +79,7 @@ namespace ImageSearch.WPF
                     Stopwatch timer = new Stopwatch();
 
                     string selectedPath = folderDialog.SelectedPath;
+                    imageRoot = selectedPath;
 
                     try
                     {
@@ -85,10 +113,24 @@ namespace ImageSearch.WPF
             ClearIndexButton.IsEnabled = false;
             ViewIndexButton.IsEnabled = false;
             Progress<string> p = new Progress<string>(ProgressReportIndex);
-            index = new Index(p);
+            index = new Index(pattern, p);
             folders = new List<string>();
             UpdateFolderStatus();
             UpdateLog($"Index is empty");
+        }
+
+        private void GetStubFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            using (var fileDialog = new OpenFileDialog())
+            {
+                DialogResult result = fileDialog.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    noImageStub = fileDialog.FileName;
+                    UpdateLog($"Selecting NoImageStub file: \"{noImageStub}\"");
+                    NoImageFileTextBox.Text = noImageStub;
+                }
+            }
         }
 
         private void OpenExcelFileButton_Click(object sender, RoutedEventArgs e)
@@ -103,10 +145,6 @@ namespace ImageSearch.WPF
                     try
                     {
                         editor = new XlsxEditor(xlsxFile);
-
-                        editor.R = XLColor.FromName(ColorsRightCombo.SelectedValue.ToString());
-                        editor.W = XLColor.FromName(ColorsWrongCombo.SelectedValue.ToString());
-
                         UpdateXlsStatus();
                         UpdateLog($"Selecting Excel file: \"{xlsxFile}\", sheets count - {editor.Sheets.Count}");
                     }
@@ -178,8 +216,8 @@ namespace ImageSearch.WPF
             {
                 Stopwatch timer = new Stopwatch();
 
-                editor.R = XLColor.FromName(ColorsRightCombo.SelectedValue.ToString());
-                editor.W = XLColor.FromName(ColorsWrongCombo.SelectedValue.ToString());
+                editor.NoImageFile = noImageStub;
+                index.Pattern = PatternTextBox.Text;
 
                 timer.Start();
                 Tuple<int, string> result = editor.Change(index, SheetSelectorListBox.SelectedIndex, outputFolder, moveLinks);
@@ -278,14 +316,14 @@ namespace ImageSearch.WPF
         private void AddVersionToTitle()
         {
             var v = Assembly.GetExecutingAssembly().GetName().Version;
-            
-            #if RELEASE
+
+#if RELEASE
             Title += $" [{v.Major}.{v.Minor}]";
-            #endif
-            
-            #if DEBUG
+#endif
+
+#if DEBUG
             Title += $" [{v.Major}.{v.Minor} build {v.Build} revision {v.Revision}]";
-            #endif
+#endif
         }
 
         private void ClearWorkspace()

@@ -11,7 +11,6 @@ namespace ImageIndex
 {
     public class Index
     {
-        const string DefaultPattern = @"\d{4,}";
         string m_indexPattern;
         IProgress<string> m_progress;
         List<string> m_paths;
@@ -34,12 +33,17 @@ namespace ImageIndex
             }
         }
 
-        public Index(IProgress<string> progress = null)
+        public Index(string pattern, IProgress<string> progress = null)
         {
             m_paths = new List<string>();
             m_files = new List<string>();
             m_progress = progress;
-            m_indexPattern = DefaultPattern;
+            m_indexPattern = pattern;
+        }
+
+        public Index(string filename)
+        {
+            Load(filename);
         }
 
         public async Task Add(string path)
@@ -47,11 +51,6 @@ namespace ImageIndex
             if (!Directory.Exists(path)) return;
             if (m_files.Contains(path)) return;
             await Building(path);
-        }
-
-        public Index(string filename)
-        {
-            Load(filename);
         }
 
         public void Save(string filename)

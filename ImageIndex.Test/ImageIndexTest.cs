@@ -12,7 +12,7 @@ namespace ImageIndex.Test
 
         private Index MakeIndex()
         {
-            Index index = new Index();
+            Index index = new Index(pattern: @"\d{4,}");
 
             foreach (string path in testPaths)
             {

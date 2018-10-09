@@ -7,7 +7,6 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Media;
 
 // Modify Excel file
 
@@ -26,8 +25,7 @@ namespace XlsxModifier
         public List<string> Sheets { get { return GetSheetsNames(); } }
         public int FilesToCollect { get { return collector.Count; } }
 
-        public XLColor R { get; set; }
-        public XLColor W { get; set; }
+        public string NoImageFile { get; set; }
 
         public XlsxEditor(string xlsxfile)
         {
@@ -75,20 +73,16 @@ namespace XlsxModifier
                         }
                     }
 
-                    row.Cell(lastColumnNumber + 1).Value = searched.Count;
-                    row.Cell(lastColumnNumber + 2).Value = fileNames.ToString();
-
-                    color = R;
-
+                    row.Cell(lastColumnNumber + 1).Value = fileNames.ToString();
                     count++;
                 }
                 else
                 {
-                    color = W;
+                    row.Cell(lastColumnNumber + 1).Value = NoImageFile;
                 }
-
-                row.Style.Fill.BackgroundColor = color;
             }
+
+            worksheet.Cell(1, lastColumnNumber + 1).Value = "@Pict";
 
             string ext = Path.GetExtension(xlsxfile);
             string folder = Path.GetDirectoryName(xlsxfile);

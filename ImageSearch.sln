@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageSearch.WinForms", "ImageSearch\ImageSearch.WinForms.csproj", "{98347FD5-F841-4D45-B056-FAC1F97AB3FF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageIndex", "ImageIndex\ImageIndex.csproj", "{A1D34F39-C82C-4C3A-864B-5D524A7E464C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageIndex.Test", "ImageIndex.Test\ImageIndex.Test.csproj", "{74466589-2CA3-4BB1-8736-2E854590A40F}"
@@ -35,10 +33,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{98347FD5-F841-4D45-B056-FAC1F97AB3FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{98347FD5-F841-4D45-B056-FAC1F97AB3FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{98347FD5-F841-4D45-B056-FAC1F97AB3FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{98347FD5-F841-4D45-B056-FAC1F97AB3FF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A1D34F39-C82C-4C3A-864B-5D524A7E464C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A1D34F39-C82C-4C3A-864B-5D524A7E464C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1D34F39-C82C-4C3A-864B-5D524A7E464C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -80,7 +74,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{98347FD5-F841-4D45-B056-FAC1F97AB3FF} = {D6358D52-0B93-4C2D-857A-D718B10F0EED}
 		{A1D34F39-C82C-4C3A-864B-5D524A7E464C} = {12EC1386-FE62-491E-8432-DD2A648CED74}
 		{74466589-2CA3-4BB1-8736-2E854590A40F} = {A5BB372B-742F-4EB7-AEA3-42B5DB4208CA}
 		{45DE8FE0-45D9-4128-BC35-FD9AE0196F74} = {12EC1386-FE62-491E-8432-DD2A648CED74}
@@ -90,6 +83,9 @@ Global
 		{EADAFC5A-CF8C-44B2-B6DC-2D3EB5CE2113} = {D6358D52-0B93-4C2D-857A-D718B10F0EED}
 		{496A1290-2706-45F8-8228-8335994C4647} = {D6358D52-0B93-4C2D-857A-D718B10F0EED}
 		{BB050259-82CE-4C5C-9A9E-3DEDD60FD23C} = {12EC1386-FE62-491E-8432-DD2A648CED74}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2B8A94C3-13D4-4C78-A137-5CFDFACF6FF3}
 	EndGlobalSection
 	GlobalSection(HgVSProperties) = preSolution
 		SolutionIsControlled = True

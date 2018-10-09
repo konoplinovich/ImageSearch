@@ -4,22 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageSearch.WPF"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Image Search" Height="725" Width="800" MinWidth="800" MinHeight="725" 
-        SnapsToDevicePixels="True" WindowStartupLocation="CenterScreen">
-
-    <Window.Resources>
-        <ObjectDataProvider MethodName="GetType" ObjectType="{x:Type sys:Type}" x:Key="colorsTypeOdp">
-            <ObjectDataProvider.MethodParameters>
-                <sys:String>System.Windows.Media.Colors, PresentationCore,
-            Version=3.0.0.0, Culture=neutral, 
-            PublicKeyToken=31bf3856ad364e35</sys:String>
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
-        <ObjectDataProvider ObjectInstance="{StaticResource colorsTypeOdp}" MethodName="GetProperties" x:Key="colorPropertiesOdp">
-        </ObjectDataProvider>
-    </Window.Resources>
+        SnapsToDevicePixels="True" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closing="Window_Closing">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -63,8 +50,15 @@
                 <Button Name="ViewIndexButton" DockPanel.Dock="Top" Margin="0,10,0,0" Height="30" VerticalAlignment="Top" FontWeight="Bold" Click="ViewIndexButton_Click" IsEnabled="False">View index</Button>
                 <TextBox Name="PatternTextBox" DockPanel.Dock="Top" Margin="0,10,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center">[ENTER PATTERN]</TextBox>
             </DockPanel>
-            <ListBox Name="FolderListBox" Grid.Column="1" Margin="10,10,10,0">
-            </ListBox>
+
+            <StackPanel Grid.Column="1" Margin="10,10,10,0">
+                <ListBox Name="FolderListBox" MinHeight="110"/>
+                <DockPanel>
+                    <Button Name="GetStubFileButton" Margin="0,10,10,0" Padding="10,0,10,0" Click="GetStubFileButton_Click">Select file for missing images</Button>
+                    <TextBox Name="NoImageFileTextBox" MinHeight="25" Margin="0,10,0,0" VerticalContentAlignment="Center"></TextBox>
+                </DockPanel>
+            </StackPanel>
+
             <StackPanel Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" Orientation="Horizontal">
                 <Label Margin="5,0,0,0" VerticalContentAlignment="Center" FontWeight="Bold">Folder in index</Label>
                 <Label Name="foldersLabel" VerticalContentAlignment="Center">0</Label>
@@ -90,28 +84,6 @@
             </Grid.RowDefinitions>
             <DockPanel Margin="10,10,0,0">
                 <Button Name="OpenExcelFileButton" DockPanel.Dock="Top" Margin="0,0,0,0" Height="30" VerticalAlignment="Top" FontWeight="Bold" Click="OpenExcelFileButton_Click">Open Excel file</Button>
-                <Label DockPanel.Dock="Top" VerticalContentAlignment="Center" FontWeight="Bold">Normal color</Label>
-                <ComboBox Name="ColorsRightCombo" DockPanel.Dock="Top" Height="25" Margin="0,0,0,0" VerticalAlignment="Top" ItemsSource="{Binding Source={StaticResource colorPropertiesOdp}}" SelectedValuePath="Name">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Height="17" Margin="0,0,0,2">
-                                <Border BorderThickness="1" BorderBrush="Black" Width="17" VerticalAlignment="Stretch" Background="{Binding Name}"/>
-                                <TextBlock Text="{Binding Name}" Margin="8,0,0,0"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-                <Label DockPanel.Dock="Top" VerticalContentAlignment="Center" FontWeight="Bold">Wrong color</Label>
-                <ComboBox Name="ColorsWrongCombo" DockPanel.Dock="Top" Height="25" Margin="0,0,0,10" VerticalAlignment="Top" ItemsSource="{Binding Source={StaticResource colorPropertiesOdp}}" SelectedValuePath="Name">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Height="17" Margin="0,0,0,2">
-                                <Border BorderThickness="1" BorderBrush="Black" Width="17" VerticalAlignment="Stretch" Background="{Binding Name}"/>
-                                <TextBlock Text="{Binding Name}" Margin="8,0,0,0"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
             </DockPanel>
             <ListBox Name="SheetSelectorListBox" Grid.Column="1" Margin="10,10,10,0" SelectionChanged="FolderListBox_SelectionChanged">
             </ListBox>
